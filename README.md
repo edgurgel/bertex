@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/edgurgel/bertex.png?branch=master)](https://travis-ci.org/edgurgel/bertex)
 # Bertex
 
 Elixir BERT encoder/decoder. See http://bert-rpc.org for full spec.
