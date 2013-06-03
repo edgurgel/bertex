@@ -16,11 +16,11 @@ The following types can be automatically encoded and decoded.
     bool      -> BERT boolean (complex)
     HashDict  -> BERT dict (complex)
 
-To encode Erlang terms to BERT binaries, use:
+To encode Elixir terms to BERT binaries, use:
 
     Bertex.encode(term) -> binary
 
-To decode BERT binaries to Erlang terms, use:
+To decode BERT binaries to Elixir terms, use:
 
     Bertex.decode(binary) -> term
 
