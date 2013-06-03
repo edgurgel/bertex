@@ -6,15 +6,15 @@ Elixir BERT encoder/decoder. See http://bert-rpc.org for full spec.
 The following types can be automatically encoded and decoded.
 
 
-  integer   -> BERT integer
-  float     -> BERT float
-  atom      -> BERT atom
-  tuple     -> BERT tuple
-  list      -> BERT list or BERT bytelist
-  binary    -> BERT binary
-  []        -> BERT nil (complex)
-  bool      -> BERT boolean (complex)
-  HashDict  -> BERT dict (complex)
+    integer   -> BERT integer
+    float     -> BERT float
+    atom      -> BERT atom
+    tuple     -> BERT tuple
+    list      -> BERT list or BERT bytelist
+    binary    -> BERT binary
+    []        -> BERT nil (complex)
+    bool      -> BERT boolean (complex)
+    HashDict  -> BERT dict (complex)
 
 To encode Erlang terms to BERT binaries, use:
 
