@@ -2,12 +2,88 @@ Code.require_file "test_helper.exs", __DIR__
 
 defmodule BertexTest do
   use ExUnit.Case
+  import Bertex
 
   doctest Bertex
 
   defp assert_term(term) do
-    import Bertex
     assert decode(encode(term)) == term
+  end
+
+  test "encode true" do
+    assert binary_to_term(encode(true)) == {:bert, true}
+  end
+
+  test "encode false" do
+    assert binary_to_term(encode(false)) == {:bert, false}
+  end
+
+  test "encode integer" do
+    assert binary_to_term(encode(1)) == 1
+  end
+
+  test "encode float" do
+    assert binary_to_term(encode(3.14)) == 3.14
+  end
+
+  test "encode binary" do
+    assert binary_to_term(encode("binary string")) == "binary string"
+  end
+
+  test "encode atom" do
+    assert binary_to_term(encode(:atom)) == :atom
+  end
+
+  test "encode empty list" do
+    assert binary_to_term(encode([])) == {:bert, nil}
+  end
+
+  test "encode list" do
+    assert binary_to_term(encode([1, 2, 3])) == [1, 2, 3]
+  end
+
+  test "encode HashDict" do
+    dict = HashDict.new
+      |> HashDict.put(:key, "value")
+    assert binary_to_term(encode(dict)) == {:bert, :dict, key: "value"}
+  end
+
+  test "decode true" do
+    assert decode(term_to_binary({:bert, true})) == true
+  end
+
+  test "decode false" do
+    assert decode(term_to_binary({:bert, false})) == false
+  end
+
+  test "decode integer" do
+    assert decode(term_to_binary(1)) == 1
+  end
+
+  test "decode float" do
+    assert decode(term_to_binary(3.14)) == 3.14
+  end
+
+  test "decode binary" do
+    assert decode(term_to_binary("binary string")) == "binary string"
+  end
+
+  test "decode atom" do
+    assert decode(term_to_binary(:atom)) == :atom
+  end
+
+  test "decode empty list" do
+    assert decode(term_to_binary({:bert, nil})) == []
+  end
+
+  test "decode list" do
+    assert decode(term_to_binary([1, 2, 3])) == [1, 2, 3]
+  end
+
+  test "decode HashDict" do
+    dict = HashDict.new
+      |> HashDict.put(:key, "value")
+    assert decode(term_to_binary({:bert, :dict, key: "value"})) == dict
   end
 
   test "encode/decode true" do
@@ -53,9 +129,9 @@ defmodule BertexTest do
   end
 
   test "encode/decode a HashDict" do
-    dict = HashDict.new
+    HashDict.new
       |> HashDict.put(:hello, "world")
-    assert_term(dict)
+      |> assert_term
   end
 
 end
