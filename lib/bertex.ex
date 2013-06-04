@@ -18,6 +18,7 @@ defmodule Bertex do
   end
 
   defimpl Bert, for: List do
+    def encode([]), do: {:bert, nil}
     def encode(list) do
       Enum.map(list, Bert.encode(&1))
     end
@@ -34,21 +35,13 @@ defmodule Bertex do
         |> list_to_tuple
     end
 
-    def decode({:bert, nil}) do
-      []
-    end
+    def decode({:bert, nil}), do: []
 
-    def decode({:bert, true}) do
-      true
-    end
+    def decode({:bert, true}), do: true
 
-    def decode({:bert, false}) do
-      false
-    end
+    def decode({:bert, false}), do: false
 
-    def decode({:bert, :dict, dict}) do
-      HashDict.new(dict)
-    end
+    def decode({:bert, :dict, dict}), do: HashDict.new(dict)
 
     def decode(tuple) do
       tuple_to_list(tuple)
@@ -58,9 +51,7 @@ defmodule Bertex do
   end
 
   defimpl Bert, for: HashDict do
-    def encode(dict) do
-      {:bert, :dict, HashDict.to_list(dict)}
-    end
+    def encode(dict), do: {:bert, :dict, HashDict.to_list(dict)}
     # This should never happen.
     def decode(dict), do: HashDict.new(dict)
   end
