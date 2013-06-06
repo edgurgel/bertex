@@ -6,15 +6,16 @@ Elixir BERT encoder/decoder. See http://bert-rpc.org for full spec.
 The following types can be automatically encoded and decoded.
 
 
-    integer   -> BERT integer
-    float     -> BERT float
-    atom      -> BERT atom
-    tuple     -> BERT tuple
-    list      -> BERT list or BERT bytelist
-    binary    -> BERT binary
-    []        -> BERT nil (complex)
-    bool      -> BERT boolean (complex)
-    HashDict  -> BERT dict (complex)
+    integer   <-> BERT integer
+    float     <-> BERT float
+    atom      <-> BERT atom
+    tuple     <-> BERT tuple
+    list      <-> BERT list or BERT bytelist
+    binary    <-> BERT binary
+    []        <-> BERT nil (complex)
+    bool      <-> BERT boolean (complex)
+    HashDict  <-> BERT dict (complex)
+    Record    -> BERT dict (complex)
 
 To encode Elixir terms to BERT binaries, use:
 
@@ -37,4 +38,7 @@ iex> Bertex.decode(<<131,108,0,0,0,6,97,42,100,0,6,98,97,110,97,110,97,104,3,100
 iex> dict = HashDict.new |> HashDict.put(:hello, "world") |> Bertex.encode
 <<131,104,3,100,0,4,98,101,114,116,100,0,4,100,105,99,116,108,0,0,0,1,104,2,100,0,5,104,101,108,108,111,109,0,0,0,5,119,111,114,108,100,106>>
 
+iex> defrecord FileInfo, a: 1, b: 0, c: "default"
+iex> Bertex.decode(Bertex.encode(FileInfo.new))
+#HashDict<[a: 1, b: 0, c: "default"]>
 ```

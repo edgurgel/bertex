@@ -28,11 +28,30 @@ defmodule Bertex do
     end
   end
 
+  # Inspired by talentdeficit/jsex solution
   defimpl Bert, for: Tuple do
+    def encode(tuple) when is_record(tuple) do
+      if function_exported?(elem(tuple, 0), :__record__, 1) do
+        key_values = Enum.map(tuple.__record__(:fields),
+          fn({ key, _ }) ->
+            index = tuple.__index__(key)
+            value = elem(tuple, index)
+            { key, value }
+          end)
+        { :bert, :dict, key_values }
+      else
+        # Tuple is not actually a record
+        encode_tuple(tuple)
+      end
+    end
     def encode(tuple) do
+      encode_tuple(tuple)
+    end
+
+    defp encode_tuple(tuple) do
       tuple_to_list(tuple)
-        |> Enum.map(Bert.encode(&1))
-        |> list_to_tuple
+      |> Enum.map(Bert.encode(&1))
+      |> list_to_tuple
     end
 
     def decode({:bert, nil}), do: []
