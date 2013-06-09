@@ -25,6 +25,10 @@ To decode BERT binaries to Elixir terms, use:
 
     Bertex.decode(binary) -> term
 
+To [safely](http://www.erlang.org/doc/man/erlang.html#binary_to_term-2) decode BERT binaries to Elixir terms, use:
+
+    Bertex.safe_decode(binary) -> term
+
 Examples
 
 ```iex
