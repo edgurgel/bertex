@@ -101,4 +101,10 @@ defmodule Bertex do
       |> Bert.decode
   end
 
+  @spec safe_decode(binary) :: term
+  def safe_decode(bin) do
+    binary_to_term(bin, [:safe])
+      |> Bert.decode
+  end
+
 end

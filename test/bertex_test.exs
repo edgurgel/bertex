@@ -146,4 +146,14 @@ defmodule BertexTest do
       |> assert_term
   end
 
+  test "safely decode a known atom" do
+    assert safe_decode(encode(:known_atom)) == :known_atom
+  end
+
+  test "safely decode an atom" do
+    # :unknown_atom
+    binary_rep_to_unknown_atom = <<131,100,0,12,117,110,107,110,111,119,110,95,97,116,111,109>>
+    assert_raise ArgumentError,  fn -> safe_decode(binary_rep_to_unknown_atom) end
+  end
+
 end
