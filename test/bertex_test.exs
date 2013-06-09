@@ -56,6 +56,11 @@ defmodule BertexTest do
     assert binary_to_term(encode(file_info)) == {:bert, :dict, a: 1, b: 2, c: 3}
   end
 
+  test "encode complex Record" do
+    file_info = FileInfo.new(a: 1, b: [1, 2, 3], c: false)
+    assert binary_to_term(encode(file_info)) == {:bert, :dict, a: 1, b: [1, 2, 3], c: {:bert, false}}
+  end
+
   test "decode true" do
     assert decode(term_to_binary({:bert, true})) == true
   end

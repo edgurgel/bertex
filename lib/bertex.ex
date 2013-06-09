@@ -36,7 +36,7 @@ defmodule Bertex do
           fn({ key, _ }) ->
             index = tuple.__index__(key)
             value = elem(tuple, index)
-            { key, value }
+            { key, Bert.encode(value) }
           end)
         { :bert, :dict, key_values }
       else
