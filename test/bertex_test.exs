@@ -99,6 +99,13 @@ defmodule BertexTest do
     assert decode(term_to_binary({:bert, :dict, key: "value"})) == dict
   end
 
+  test "decode complex HashDict" do
+    dict = HashDict.new
+      |> HashDict.put(:key, "value")
+      |> HashDict.put(:key2, false)
+    assert decode(term_to_binary({:bert, :dict, key: "value", key2: {:bert, false}})) == dict
+  end
+
   test "encode/decode true" do
     assert_term(true)
   end

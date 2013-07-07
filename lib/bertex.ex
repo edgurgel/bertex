@@ -60,7 +60,7 @@ defmodule Bertex do
 
     def decode({:bert, false}), do: false
 
-    def decode({:bert, :dict, dict}), do: HashDict.new(dict)
+    def decode({:bert, :dict, dict}), do: HashDict.new(Bert.decode(dict))
 
     def decode(tuple) do
       tuple_to_list(tuple)
