@@ -34,7 +34,7 @@ defmodule Bertex do
       if function_exported?(elem(tuple, 0), :__record__, 1) do
         key_values = Enum.map(tuple.__record__(:fields),
           fn({ key, _ }) ->
-            index = tuple.__index__(key)
+            index = tuple.__record__(:index, key)
             value = elem(tuple, index)
             { key, Bert.encode(value) }
           end)
