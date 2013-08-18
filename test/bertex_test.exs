@@ -33,6 +33,11 @@ defmodule BertexTest do
     assert binary_to_term(encode("binary string")) == "binary string"
   end
 
+  test "encode UTF-8 string" do
+    assert binary_to_term(encode("été")) == "été"
+    assert encode("été") == <<131, 109, 0, 0, 0, 5, 195, 169, 116, 195, 169>>
+  end
+
   test "encode atom" do
     assert binary_to_term(encode(:atom)) == :atom
   end
