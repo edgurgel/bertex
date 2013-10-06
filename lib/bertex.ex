@@ -20,11 +20,11 @@ defmodule Bertex do
   defimpl Bert, for: List do
     def encode([]), do: {:bert, nil}
     def encode(list) do
-      Enum.map(list, Bert.encode(&1))
+      Enum.map(list, &Bert.encode(&1))
     end
 
     def decode(list) do
-      Enum.map(list, Bert.decode(&1))
+      Enum.map(list, &Bert.decode(&1))
     end
   end
 
@@ -50,7 +50,7 @@ defmodule Bertex do
 
     defp encode_tuple(tuple) do
       tuple_to_list(tuple)
-      |> Enum.map(Bert.encode(&1))
+      |> Enum.map(&Bert.encode(&1))
       |> list_to_tuple
     end
 
@@ -64,7 +64,7 @@ defmodule Bertex do
 
     def decode(tuple) do
       tuple_to_list(tuple)
-        |> Enum.map(Bert.decode(&1))
+        |> Enum.map(&Bert.decode(&1))
         |> list_to_tuple
     end
   end
