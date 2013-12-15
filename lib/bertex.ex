@@ -4,7 +4,7 @@ defmodule Bertex do
   More at: https://github.com/eproxus/bert.erl and http://github.com/mojombo/bert.erl
   """
   defprotocol Bert do
-    @only [Atom, Record, List, Tuple, Any]
+    @fallback_to_any true
     def encode(term)
     def decode(term)
   end

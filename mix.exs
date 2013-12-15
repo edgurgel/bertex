@@ -4,7 +4,7 @@ defmodule Bertex.Mixfile do
   def project do
     [ app: :bertex,
       version: "1.1.2",
-      elixir: "~> 0.10.2",
+      elixir: "~> 0.11.2",
       deps: deps ]
   end
 
