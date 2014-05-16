@@ -3,6 +3,10 @@ defmodule Bertex do
   This is a work TOTALLY based on @mojombo and @eproxus work:
   More at: https://github.com/eproxus/bert.erl and http://github.com/mojombo/bert.erl
   """
+  import :erlang, only: [binary_to_term: 1,
+                         binary_to_term: 2,
+                         term_to_binary: 1]
+
   defprotocol Bert do
     @fallback_to_any true
     def encode(term)
@@ -60,7 +64,7 @@ defmodule Bertex do
 
     def decode({:bert, false}), do: false
 
-    def decode({:bert, :dict, dict}), do: HashDict.new(Bert.decode(dict))
+    def decode({:bert, :dict, dict}), do: Enum.into(Bert.decode(dict), %{})
 
     def decode(tuple) do
       tuple_to_list(tuple)
@@ -69,10 +73,16 @@ defmodule Bertex do
     end
   end
 
-  defimpl Bert, for: HashDict do
-    def encode(dict), do: {:bert, :dict, HashDict.to_list(dict)}
+  defimpl Bert, for: Map do
+    def encode(dict), do: {:bert, :dict, Dict.to_list(dict)}
     # This should never happen.
-    def decode(dict), do: HashDict.new(dict)
+    def decode(dict), do: Enum.into(dict, %{})
+  end
+
+  defimpl Bert, for: HashDict do
+    def encode(dict), do: {:bert, :dict, Dict.to_list(dict)}
+    # This should never happen.
+    def decode(dict), do: Enum.into(dict, %{})
   end
 
   defimpl Bert, for: Any do
@@ -86,8 +96,7 @@ defmodule Bertex do
   """
   @spec encode(term) :: binary
   def encode(term) do
-    Bert.encode(term)
-      |> term_to_binary
+    Bert.encode(term) |> term_to_binary
   end
 
   @doc """
@@ -97,14 +106,12 @@ defmodule Bertex do
   """
   @spec decode(binary) :: term
   def decode(bin) do
-    binary_to_term(bin)
-      |> Bert.decode
+    binary_to_term(bin) |> Bert.decode
   end
 
   @spec safe_decode(binary) :: term
   def safe_decode(bin) do
-    binary_to_term(bin, [:safe])
-      |> Bert.decode
+    binary_to_term(bin, [:safe]) |> Bert.decode
   end
 
 end

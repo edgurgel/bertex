@@ -1,8 +1,7 @@
-Code.require_file "test_helper.exs", __DIR__
-
-defmodule BertexTest do
+defmodule Bertex.Test do
   use ExUnit.Case
   import Bertex
+  import :erlang, only: [binary_to_term: 1, term_to_binary: 1]
 
   doctest Bertex
 
@@ -50,9 +49,15 @@ defmodule BertexTest do
     assert binary_to_term(encode([1, 2, 3])) == [1, 2, 3]
   end
 
-  test "encode HashDict" do
+  test "encode map" do
+    dict = %{}
+      |> Dict.put(:key, "value")
+    assert binary_to_term(encode(dict)) == {:bert, :dict, key: "value"}
+  end
+
+  test "encode hashdict" do
     dict = HashDict.new
-      |> HashDict.put(:key, "value")
+      |> Dict.put(:key, "value")
     assert binary_to_term(encode(dict)) == {:bert, :dict, key: "value"}
   end
 
@@ -98,16 +103,16 @@ defmodule BertexTest do
     assert decode(term_to_binary([1, 2, 3])) == [1, 2, 3]
   end
 
-  test "decode HashDict" do
-    dict = HashDict.new
-      |> HashDict.put(:key, "value")
+  test "decode dict" do
+    dict = %{}
+      |> Dict.put(:key, "value")
     assert decode(term_to_binary({:bert, :dict, key: "value"})) == dict
   end
 
-  test "decode complex HashDict" do
-    dict = HashDict.new
-      |> HashDict.put(:key, "value")
-      |> HashDict.put(:key2, false)
+  test "decode complex Dict" do
+    dict = %{}
+      |> Dict.put(:key, "value")
+      |> Dict.put(:key2, false)
     assert decode(term_to_binary({:bert, :dict, key: "value", key2: {:bert, false}})) == dict
   end
 
@@ -145,17 +150,16 @@ defmodule BertexTest do
 
   test "encode/decode Elixir record" do
     file_info = FileInfo.new(a: 1, b: 2, c: 3)
-    assert decode(encode(file_info)) == HashDict.new(a: 1, b: 2, c: 3)
+    assert decode(encode(file_info)) == %{ a: 1, b: 2, c: 3 }
   end
 
   test "encode/decode complex list" do
     assert_term([1,2,3, false, true, {"e", "f"}])
   end
 
-  test "encode/decode a HashDict" do
-    HashDict.new
-      |> HashDict.put(:hello, "world")
-      |> assert_term
+  test "encode/decode a Dict" do
+    %{} |> Dict.put(:hello, "world")
+        |> assert_term
   end
 
   test "safely decode a known atom" do
