@@ -5,9 +5,6 @@ defmodule Bertex.Test do
 
   doctest Bertex
 
-  # Just a example Record
-  defrecord FileInfo, a: nil, b: 0, c: "default"
-
   defp assert_term(term) do
     assert decode(encode(term)) == term
   end
@@ -59,16 +56,6 @@ defmodule Bertex.Test do
     dict = HashDict.new
       |> Dict.put(:key, "value")
     assert binary_to_term(encode(dict)) == {:bert, :dict, key: "value"}
-  end
-
-  test "encode Record" do
-    file_info = FileInfo.new(a: 1, b: 2, c: 3)
-    assert binary_to_term(encode(file_info)) == {:bert, :dict, a: 1, b: 2, c: 3}
-  end
-
-  test "encode complex Record" do
-    file_info = FileInfo.new(a: 1, b: [1, 2, 3], c: false)
-    assert binary_to_term(encode(file_info)) == {:bert, :dict, a: 1, b: [1, 2, 3], c: {:bert, false}}
   end
 
   test "decode true" do
@@ -146,11 +133,6 @@ defmodule Bertex.Test do
 
   test "encode/decode empty list" do
     assert_term([])
-  end
-
-  test "encode/decode Elixir record" do
-    file_info = FileInfo.new(a: 1, b: 2, c: 3)
-    assert decode(encode(file_info)) == %{ a: 1, b: 2, c: 3 }
   end
 
   test "encode/decode complex list" do
