@@ -16,7 +16,6 @@ The following types can be automatically encoded and decoded.
     bool      <-> BERT boolean (complex)
     Map       <-> BERT dict (complex)
     HashDict   -> BERT dict (complex)
-    Record     -> BERT dict (complex)
 
 To encode Elixir terms to BERT binaries, use:
 
@@ -44,8 +43,4 @@ iex> dict = HashDict.new |> HashDict.put(:hello, "world") |> Bertex.encode
 
 iex> %{hello: "world"} |> Bertex.encode
 <<131, 104, 3, 100, 0, 4, 98, 101, 114, 116, 100, 0, 4, 100, 105, 99, 116, 108, 0, 0, 0, 1, 104, 2, 100, 0, 5, 104, 101, 108, 108, 111, 109, 0, 0, 0, 5, 119, 111, 114, 108, 100, 106>>
-
-iex> defrecord FileInfo, a: 1, b: 0, c: "default"
-iex> Bertex.decode(Bertex.encode(FileInfo.new))
-%{a: 1, b: 0, c: "default"}
 ```
