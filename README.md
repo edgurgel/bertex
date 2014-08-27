@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/edgurgel/bertex.png?branch=master)](https://travis-ci.org/edgurgel/bertex)
+[![Build Status](https://travis-ci.org/edgurgel/bertex.png?branch=master)](https://travis-ci.org/edgurgel/bertex) [![Hex pm](http://img.shields.io/hexpm/v/bertex.svg)](https://hex.pm/packages/bertex)
+
 # Bertex
 
 Elixir BERT encoder/decoder. See http://bert-rpc.org for full spec.
