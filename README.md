@@ -16,7 +16,6 @@ The following types can be automatically encoded and decoded.
     []        <-> BERT nil (complex)
     bool      <-> BERT boolean (complex)
     Map       <-> BERT dict (complex)
-    HashDict   -> BERT dict (complex)
 
 To encode Elixir terms to BERT binaries, use:
 
