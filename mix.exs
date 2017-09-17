@@ -7,19 +7,20 @@ defmodule Bertex.Mixfile do
 
   def project do
     [ app: :bertex,
-      version: "1.2.0",
+      version: "1.3.0",
       elixir: "~> 1.0",
       name: "Bertex",
       description: @description,
       package: package(),
-      deps: [] ]
+      deps: [],
+      source_url: "https://github.com/edgurgel/bertex" ]
   end
 
   def application, do: []
 
   defp package do
-    [ contributors: ["Eduardo Gurgel Pinho"],
+    [ maintainers: ["Eduardo Gurgel Pinho"],
       licenses: ["MIT"],
-      links: [ { "Github", "https://github.com/edgurgel/bertex" } ] ]
+      links: %{ "Github" => "https://github.com/edgurgel/bertex" } ]
   end
 end
