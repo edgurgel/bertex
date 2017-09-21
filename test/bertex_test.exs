@@ -49,7 +49,7 @@ defmodule Bertex.Test do
   test "encode map" do
     dict = %{}
       |> Map.put(:key, "value")
-    assert binary_to_term(encode(dict)) == {:bert, :dict, key: "value"}
+    assert binary_to_term(encode(dict)) == %{key: "value"}
   end
 
   test "decode true" do
@@ -84,17 +84,10 @@ defmodule Bertex.Test do
     assert decode(term_to_binary([1, 2, 3])) == [1, 2, 3]
   end
 
-  test "decode dict" do
+  test "decode map" do
     dict = %{}
       |> Map.put(:key, "value")
-    assert decode(term_to_binary({:bert, :dict, key: "value"})) == dict
-  end
-
-  test "decode complex Map" do
-    dict = %{}
-      |> Map.put(:key, "value")
-      |> Map.put(:key2, false)
-    assert decode(term_to_binary({:bert, :dict, key: "value", key2: {:bert, false}})) == dict
+    assert decode(term_to_binary(%{key: "value"})) == dict
   end
 
   test "encode/decode true" do
