@@ -38,8 +38,8 @@ defmodule Bertex.Test do
     assert binary_to_term(encode(:atom)) == :atom
   end
 
-  test "encode empty list" do
-    assert binary_to_term(encode([])) == {:bert, nil}
+  test "encode nil" do
+    assert binary_to_term(encode(nil)) == {:bert, nil}
   end
 
   test "encode list" do
@@ -76,8 +76,8 @@ defmodule Bertex.Test do
     assert decode(term_to_binary(:atom)) == :atom
   end
 
-  test "decode empty list" do
-    assert decode(term_to_binary({:bert, nil})) == []
+  test "decode nil" do
+    assert decode(term_to_binary({:bert, nil})) == nil
   end
 
   test "decode list" do

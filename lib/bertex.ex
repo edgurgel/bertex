@@ -16,13 +16,14 @@ defmodule Bertex do
   defimpl Bert, for: Atom do
     def encode(false), do: {:bert, false}
     def encode(true), do: {:bert, true}
+    def encode(nil), do: {:bert, nil}
+
     def encode(atom), do: atom
 
     def decode(atom), do: atom
   end
 
   defimpl Bert, for: List do
-    def encode([]), do: {:bert, nil}
     def encode(list) do
       Enum.map(list, &Bert.encode(&1))
     end
@@ -40,7 +41,7 @@ defmodule Bertex do
         |> List.to_tuple
     end
 
-    def decode({:bert, nil}), do: []
+    def decode({:bert, nil}), do: nil
 
     def decode({:bert, true}), do: true
 
