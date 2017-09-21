@@ -49,11 +49,53 @@ defmodule Bertex do
 
     def decode({:bert, :dict, dict}), do: Enum.into(Bert.decode(dict), %{})
 
+    def decode({:bert, :time, mega, sec, micro}) do
+      unix = mega * 1000000000000 + sec * 1000000 + micro
+
+      DateTime.from_unix!(unix, :microseconds)
+    end
+
     def decode(tuple) do
       Tuple.to_list(tuple)
         |> Enum.map(&Bert.decode(&1))
         |> List.to_tuple
     end
+  end
+
+  defimpl Bert, for: Date do
+    def encode(term) do
+      {:ok, zero} = Time.new(0, 0, 0)
+      {:ok, naive} = NaiveDateTime.new(term, zero)
+
+      naive
+      |> DateTime.from_naive!("Etc/UTC")
+      |> Bert.encode
+    end
+
+    def decode(term), do: term
+  end
+
+  defimpl Bert, for: NaiveDateTime do
+    def encode(term) do
+      term
+      |> DateTime.from_naive!("Etc/UTC")
+      |> Bert.encode
+    end
+
+    def decode(term), do: term
+  end
+
+  defimpl Bert, for: DateTime do
+    def encode(term) do
+      micro = DateTime.to_unix(term, :microseconds)
+      mega = micro |> div(1000000000000)
+      sec = micro |> rem(1000000000000) |> div(1000000)
+      micro = micro |> rem(1000000)
+
+      {:bert, :time, mega, sec, micro}
+    end
+
+    def decode(term), do: term
   end
 
   defimpl Bert, for: Any do
@@ -84,5 +126,4 @@ defmodule Bertex do
   def safe_decode(bin) do
     binary_to_term(bin, [:safe]) |> Bert.decode
   end
-
 end

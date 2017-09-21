@@ -141,4 +141,25 @@ defmodule Bertex.Test do
     assert_raise ArgumentError,  fn -> safe_decode(binary_rep_to_unknown_atom) end
   end
 
+  test "encode naive date time" do
+    {:ok, date} = NaiveDateTime.new(2009, 10, 11, 14, 12, 1, {0, 6})
+    assert binary_to_term(encode(date)) == {:bert, :time, 1255, 270321, 0}
+  end
+
+  test "encode date time" do
+    {:ok, naive} = NaiveDateTime.new(2009, 10, 11, 14, 12, 1, {0, 6})
+    {:ok, date} = DateTime.from_naive(naive, "Etc/UTC")
+    assert binary_to_term(encode(date)) == {:bert, :time, 1255, 270321, 0}
+  end
+
+  test "encode date" do
+    {:ok, date} = Date.new(2009, 10, 11)
+    assert binary_to_term(encode(date)) == {:bert, :time, 1255, 219200, 0}
+  end
+
+  test "decode date time" do
+    {:ok, naive} = NaiveDateTime.new(2009, 10, 11, 14, 12, 1, {0, 6})
+    {:ok, date} = DateTime.from_naive(naive, "Etc/UTC")
+    assert decode(term_to_binary({:bert, :time, 1255, 270321, 0})) == date
+  end
 end
