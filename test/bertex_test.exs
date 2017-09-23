@@ -38,8 +38,8 @@ defmodule Bertex.Test do
     assert binary_to_term(encode(:atom)) == :atom
   end
 
-  test "encode empty list" do
-    assert binary_to_term(encode([])) == {:bert, nil}
+  test "encode nil" do
+    assert binary_to_term(encode(nil)) == {:bert, nil}
   end
 
   test "encode list" do
@@ -49,7 +49,7 @@ defmodule Bertex.Test do
   test "encode map" do
     dict = %{}
       |> Map.put(:key, "value")
-    assert binary_to_term(encode(dict)) == {:bert, :dict, key: "value"}
+    assert binary_to_term(encode(dict)) == %{key: "value"}
   end
 
   test "decode true" do
@@ -76,25 +76,18 @@ defmodule Bertex.Test do
     assert decode(term_to_binary(:atom)) == :atom
   end
 
-  test "decode empty list" do
-    assert decode(term_to_binary({:bert, nil})) == []
+  test "decode nil" do
+    assert decode(term_to_binary({:bert, nil})) == nil
   end
 
   test "decode list" do
     assert decode(term_to_binary([1, 2, 3])) == [1, 2, 3]
   end
 
-  test "decode dict" do
+  test "decode map" do
     dict = %{}
       |> Map.put(:key, "value")
-    assert decode(term_to_binary({:bert, :dict, key: "value"})) == dict
-  end
-
-  test "decode complex Map" do
-    dict = %{}
-      |> Map.put(:key, "value")
-      |> Map.put(:key2, false)
-    assert decode(term_to_binary({:bert, :dict, key: "value", key2: {:bert, false}})) == dict
+    assert decode(term_to_binary(%{key: "value"})) == dict
   end
 
   test "encode/decode true" do
@@ -148,4 +141,25 @@ defmodule Bertex.Test do
     assert_raise ArgumentError,  fn -> safe_decode(binary_rep_to_unknown_atom) end
   end
 
+  test "encode naive date time" do
+    {:ok, date} = NaiveDateTime.new(2009, 10, 11, 14, 12, 1, {0, 6})
+    assert binary_to_term(encode(date)) == {:bert, :time, 1255, 270321, 0}
+  end
+
+  test "encode date time" do
+    {:ok, naive} = NaiveDateTime.new(2009, 10, 11, 14, 12, 1, {0, 6})
+    {:ok, date} = DateTime.from_naive(naive, "Etc/UTC")
+    assert binary_to_term(encode(date)) == {:bert, :time, 1255, 270321, 0}
+  end
+
+  test "encode date" do
+    {:ok, date} = Date.new(2009, 10, 11)
+    assert binary_to_term(encode(date)) == {:bert, :time, 1255, 219200, 0}
+  end
+
+  test "decode date time" do
+    {:ok, naive} = NaiveDateTime.new(2009, 10, 11, 14, 12, 1, {0, 6})
+    {:ok, date} = DateTime.from_naive(naive, "Etc/UTC")
+    assert decode(term_to_binary({:bert, :time, 1255, 270321, 0})) == date
+  end
 end
